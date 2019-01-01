@@ -16,9 +16,9 @@ Disclaimer: Please do not use this plugin to violate copyrights. Don't be evil.
 // 需要用到这个文件
 require_once ABSPATH . "wp-admin" . '/includes/image.php';
 
-add_action('save_post', 'f_sync_images');
+add_action('save_post', 'f_sync_remote_images');
 
-function f_sync_images($postID)
+function f_sync_remote_images($postID)
 {
     // 自动保存操作 or 用户没有编辑权限 退出
     if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
@@ -26,7 +26,7 @@ function f_sync_images($postID)
         return;
     }
 
-    remove_action('save_post', 'f_sync_images');
+    remove_action('save_post', 'f_sync_remote_images');
 
     $post = get_post($postID);
 
@@ -72,5 +72,5 @@ function f_sync_images($postID)
 
     wp_update_post(array('ID' => $postID, 'post_content' => $content));
 
-    add_action('save_post', 'f_sync_images');
+    add_action('save_post', 'f_sync_remote_images');
 }
